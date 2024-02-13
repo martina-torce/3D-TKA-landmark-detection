@@ -1,1 +1,3 @@
-pyenv/*
+data/*
+venv/*
+.DS_Store
