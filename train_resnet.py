@@ -4,15 +4,18 @@ import datetime as dt
 from resnet3d import Resnet3DBuilder
 import tensorflow as tf
 
+# Set model name
+name = "resnet_50_aug"
+
 # Access the JOINT_TYPE environment variable
 joint = os.getenv("JOINT_TYPE")
 print(f"Training {joint} data")
 
 # Load data
-x_train = np.load(f"data/arrays/x_train_{joint}.npy")
+x_train = np.load(f"data/arrays/x_train_aug_{joint}.npy")
 x_val = np.load(f"data/arrays/x_val_{joint}.npy")
 x_test = np.load(f"data/arrays/x_test_{joint}.npy")
-y_train = np.load(f"data/arrays/y_train_{joint}.npy")
+y_train = np.load(f"data/arrays/y_train_aug_{joint}.npy")
 y_val = np.load(f"data/arrays/y_val_{joint}.npy")
 y_test = np.load(f"data/arrays/y_test_{joint}.npy")
 
@@ -49,7 +52,7 @@ print("Train finish time: " + str(finish_time))
 print("Training time: " + str(finish_time - start_time))
 
 # Save model
-file_path = f"data/models/resnet_{joint}"
+file_path = f"data/models/{name}_{joint}"
 json_string = model.to_json()
 fj = file_path + ".json"
 fh = file_path + ".h5"
@@ -60,7 +63,7 @@ print(f"Model saved to: " + file_path)
 # Save training history
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-np.savez(f'data/arrays/loss_data_{joint}.npz', 
+np.savez(f'data/arrays/loss_data_{name}_{joint}.npz', 
          epochs=np.arange(1, len(loss) + 1), loss=loss, val_loss=val_loss)
 
 # Test model on validation dataset
